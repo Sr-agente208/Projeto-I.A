@@ -24,33 +24,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Install dependencies
         run: npm install
 
       - name: Build web assets
         run: npm run build
 
-      - name: Add Android platform (se ainda não existir)
+      - name: Add Android platform (recria do zero no CI)
         run: |
-          if [ ! -f "android/app/build.gradle" ]; then
-            npx cap add android
-          else
-            echo "Plataforma Android já existe, pulando add."
-          fi
+          rm -rf android
+          npx cap add android
 
-      - name: Sync Capacitor
-        run: npx cap sync android
+      - name: Copy web assets to Android
+        run: npx cap copy android
 
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Build APK (debug, installs without signing)
+      - name: Build APK debug
         run: |
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
