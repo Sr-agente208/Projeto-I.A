@@ -30,6 +30,8 @@ export function IAHub() {
     setShowNewProject(false)
   }
 
+  const [activeTab, setActiveTab] = useState<'solo' | 'team'>('solo')
+  
   if (currentView === 'ia-hub-main') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cosmic-bg via-cosmic-dark to-cosmic-bg">
@@ -58,13 +60,19 @@ export function IAHub() {
           {/* Type Selector */}
           <div className="flex gap-4 mb-8">
             <button
-              onClick={() => setProjectType('solo')}
+              onClick={() => {
+                setProjectType('solo')
+                setActiveTab('solo')
+              }}
               className={`cosmic-button ${projectType === 'solo' ? 'cosmic-button-primary' : 'cosmic-button-secondary'}`}
             >
               🧍 Solo Lab
             </button>
             <button
-              onClick={() => setProjectType('team')}
+              onClick={() => {
+                setProjectType('team')
+                setActiveTab('team')
+              }}
               className={`cosmic-button ${projectType === 'team' ? 'cosmic-button-primary' : 'cosmic-button-secondary'}`}
             >
               👥 Team Space
