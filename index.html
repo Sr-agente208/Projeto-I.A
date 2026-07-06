@@ -1,13 +1,535 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0e27" />
-    <title>IA HUB MEGA - Inteligência Artificial Completa</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASTRA 208 — IA HUB MEGA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050a12;
+    --bg2: #080f1c;
+    --cyan: #00e5ff;
+    --purple: #b44fff;
+    --green: #00ff9d;
+    --text: #c8e0f0;
+    --muted: #4a6070;
+    --card: rgba(0,229,255,0.04);
+    --border: rgba(0,229,255,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.5;
+  }
+
+  /* Ambient glow */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-orb.one {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+    top: -200px; left: -200px;
+  }
+  .glow-orb.two {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(180,79,255,0.07) 0%, transparent 70%);
+    bottom: 0; right: -150px;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(5,10,18,0.8);
+    backdrop-filter: blur(16px);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .nav-badge {
+    font-size: 0.65rem;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+  .nav-cta {
+    font-size: 0.8rem;
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* Sections */
+  section { position: relative; z-index: 1; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 6rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.6;
+    margin-bottom: 2rem;
+  }
+  .hero-title {
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title .line-1 { color: var(--cyan); }
+  .hero-title .line-2 {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* Terminal block */
+  .terminal {
+    margin: 4rem auto 0;
+    max-width: 480px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+  }
+  .terminal-bar {
+    background: rgba(0,229,255,0.05);
+    padding: 0.6rem 1rem;
+    display: flex; gap: 0.4rem; align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #ff5f56; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #27c93f; }
+  .terminal-body {
+    padding: 1.2rem 1.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 2;
+  }
+  .t-dim { color: var(--muted); }
+  .t-cyan { color: var(--cyan); }
+  .t-green { color: var(--green); }
+  .t-purple { color: var(--purple); }
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--cyan);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* Modules */
+  .modules {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+  .section-title span { color: var(--cyan); }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .module-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent, var(--cyan)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .module-card:hover { border-color: var(--accent, var(--cyan)); transform: translateY(-4px); }
+  .module-card:hover::before { opacity: 1; }
+  .module-card.purple { --accent: var(--purple); }
+  .module-card.green { --accent: var(--green); }
+
+  .module-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .module-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent, var(--cyan));
+    margin-bottom: 0.5rem;
+  }
+  .module-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .module-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  /* IAs */
+  .ias {
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, transparent, rgba(0,229,255,0.02), transparent);
+  }
+  .ias-inner { max-width: 1100px; margin: 0 auto; }
+  .ia-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .ia-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .ia-item:hover {
+    border-color: var(--purple);
+    background: rgba(180,79,255,0.06);
+  }
+  .ia-emoji { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .ia-name { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+  .ia-role { font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* CTA footer */
+  .cta-section {
+    padding: 8rem 2rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .cta-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--cyan);
+  }
+  .cta-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  footer span { color: var(--cyan); }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 600px) {
+    nav .nav-badge { display: none; }
+    .terminal { margin-top: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-orb one"></div>
+<div class="glow-orb two"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">ASTRA 208</span>
+  <span class="nav-badge">v3.0 · Alpha</span>
+  <a href="#download" class="nav-cta">Baixar App</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">IA Hub Mega · Projeto pessoal</p>
+  <h1 class="hero-title">
+    <span class="line-1">ASTRA</span><br>
+    <span class="line-2">208</span>
+  </h1>
+  <p class="hero-sub">
+    Inteligência artificial completa, integrada e sem limitações.<br>
+    Tudo que você precisa em um único app.
+  </p>
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">↓ Baixar APK</a>
+    <a href="#modulos" class="btn-ghost">Ver módulos</a>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="dot r"></span>
+      <span class="dot y"></span>
+      <span class="dot g"></span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-dim">$</span> <span class="t-cyan">astra init</span></div>
+      <div><span class="t-green">✓</span> <span class="t-dim">ASTRA 208 online</span></div>
+      <div><span class="t-green">✓</span> <span class="t-dim">7 IAs carregadas</span></div>
+      <div><span class="t-green">✓</span> <span class="t-dim">Módulos prontos</span></div>
+      <div><span class="t-cyan">»</span> <span class="t-dim">Aguardando entrada...</span> <span class="cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="modules" id="modulos">
+  <div class="reveal">
+    <p class="section-label">O que tem dentro</p>
+    <h2 class="section-title">Três módulos.<br><span>Uma plataforma.</span></h2>
+  </div>
+
+  <div class="modules-grid">
+    <div class="module-card reveal">
+      <div class="module-icon">🧠</div>
+      <div class="module-name">IA HUB</div>
+      <p class="module-desc">
+        Seu laboratório pessoal de IA. Projetos privados, colaboração em equipe e chat com múltiplas IAs no mesmo lugar.
+      </p>
+      <div class="module-tags">
+        <span class="tag">Solo Lab</span>
+        <span class="tag">Team Space</span>
+        <span class="tag">Chat IA</span>
+      </div>
+    </div>
+
+    <div class="module-card purple reveal">
+      <div class="module-icon">🌌</div>
+      <div class="module-name">ASTRA 208</div>
+      <p class="module-desc">
+        Descreva sua tarefa e o sistema distribui automaticamente entre 7 IAs especializadas trabalhando em paralelo.
+      </p>
+      <div class="module-tags">
+        <span class="tag">7 IAs</span>
+        <span class="tag">Paralelo</span>
+        <span class="tag">Automático</span>
+      </div>
+    </div>
+
+    <div class="module-card green reveal">
+      <div class="module-icon">🚀</div>
+      <div class="module-name">Projeto-I.A</div>
+      <p class="module-desc">
+        Gerenciamento de projetos com IA integrada. Tarefas, progresso e colaboração de um jeito que faz sentido.
+      </p>
+      <div class="module-tags">
+        <span class="tag">Tarefas</span>
+        <span class="tag">Progresso</span>
+        <span class="tag">Equipe</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 IAs -->
+<section class="ias" id="ias">
+  <div class="ias-inner">
+    <div class="reveal">
+      <p class="section-label">O núcleo</p>
+      <h2 class="section-title">7 IAs <span>especializadas</span></h2>
+    </div>
+
+    <div class="ia-list">
+      <div class="ia-item reveal">
+        <div class="ia-emoji">⚡</div>
+        <div class="ia-name">Groq</div>
+        <div class="ia-role">Velocidade</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">🌟</div>
+        <div class="ia-name">Gemini</div>
+        <div class="ia-role">Criatividade</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">🧠</div>
+        <div class="ia-name">Claude</div>
+        <div class="ia-role">Raciocínio</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">💻</div>
+        <div class="ia-name">Coder</div>
+        <div class="ia-role">Código</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">🌐</div>
+        <div class="ia-name">Search</div>
+        <div class="ia-role">Pesquisa</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">🎨</div>
+        <div class="ia-name">Imagem</div>
+        <div class="ia-role">Visual</div>
+      </div>
+      <div class="ia-item reveal">
+        <div class="ia-emoji">📊</div>
+        <div class="ia-name">Analyst</div>
+        <div class="ia-role">Dados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA DOWNLOAD -->
+<section class="cta-section" id="download">
+  <div class="reveal">
+    <h2 class="cta-title">Pronto pra usar.</h2>
+    <p class="cta-sub">
+      APK de desenvolvimento disponível via GitHub Actions.<br>
+      Instale direto no Android, sem precisar de Play Store.
+    </p>
+    <a href="https://github.com/Sr-agente208/Projeto-I.A/actions" class="btn-primary" target="_blank" rel="noopener">
+      Ir para o GitHub Actions ↗
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>ASTRA 208</span> · IA HUB MEGA · v3.0 Alpha · Projeto pessoal de <span>Sr-agente208</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
 </html>
