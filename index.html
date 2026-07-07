@@ -99,6 +99,18 @@
     transition: opacity 0.2s;
   }
   .nav-cta:hover { opacity: 0.85; }
+  .nav-links {
+    display: flex; gap: 1.5rem; align-items: center;
+  }
+  .nav-link {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+  }
+  .nav-link:hover { color: var(--cyan); }
+  @media (max-width: 600px) { .nav-links { display: none; } }
 
   /* Sections */
   section { position: relative; z-index: 1; }
@@ -306,6 +318,105 @@
   .ia-name { font-size: 0.75rem; font-weight: 600; color: var(--text); }
   .ia-role { font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
 
+  /* Funções tabs */
+  .funcoes {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .tabs-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    margin-bottom: -1px;
+    letter-spacing: 0.02em;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+  .tab-btn.active.purple { color: var(--purple); border-bottom-color: var(--purple); }
+  .tab-btn.active.green { color: var(--green); border-bottom-color: var(--green); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .func-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .func-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .func-card:hover {
+    border-color: var(--fc, var(--cyan));
+    background: rgba(0,229,255,0.03);
+  }
+  .func-card.p:hover { background: rgba(180,79,255,0.03); }
+  .func-card.g:hover { background: rgba(0,255,157,0.03); }
+  .func-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .func-icon {
+    font-size: 1.4rem;
+    width: 2.4rem; height: 2.4rem;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .func-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--fc, var(--cyan));
+  }
+  .func-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .func-status {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.55rem;
+    border-radius: 100px;
+    margin-top: 0.75rem;
+    background: rgba(0,255,157,0.08);
+    color: var(--green);
+    border: 1px solid rgba(0,255,157,0.15);
+  }
+  .func-status.wip {
+    background: rgba(255,189,0,0.08);
+    color: #ffc107;
+    border-color: rgba(255,189,0,0.2);
+  }
+  .func-status.plan {
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    border-color: var(--border);
+  }
+
   /* CTA footer */
   .cta-section {
     padding: 8rem 2rem;
@@ -363,6 +474,11 @@
 <!-- NAV -->
 <nav>
   <span class="nav-logo">ASTRA 208</span>
+  <div class="nav-links">
+    <a href="#modulos" class="nav-link">Módulos</a>
+    <a href="#funcoes" class="nav-link">Funções</a>
+    <a href="#ias" class="nav-link">IAs</a>
+  </div>
   <span class="nav-badge">v3.0 · Alpha</span>
   <a href="#download" class="nav-cta">Baixar App</a>
 </nav>
@@ -496,7 +612,270 @@
   </div>
 </section>
 
-<!-- CTA DOWNLOAD -->
+<!-- FUNÇÕES -->
+<section class="funcoes" id="funcoes">
+  <div class="reveal">
+    <p class="section-label">O que já tem e o que vem</p>
+    <h2 class="section-title">Todas as <span>funções</span></h2>
+  </div>
+
+  <div class="tabs-bar reveal">
+    <button class="tab-btn active" onclick="switchTab('ia-hub', this)">🧠 IA HUB</button>
+    <button class="tab-btn" onclick="switchTab('astra', this, 'purple')">🌌 ASTRA 208</button>
+    <button class="tab-btn" onclick="switchTab('projeto', this, 'green')">🚀 Projeto-I.A</button>
+    <button class="tab-btn" onclick="switchTab('extras', this)">⚡ Extras</button>
+  </div>
+
+  <!-- IA HUB -->
+  <div class="tab-panel active" id="tab-ia-hub">
+    <div class="func-grid">
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🧍</span>
+          <span class="func-name">Solo Lab</span>
+        </div>
+        <p class="func-desc">Projetos pessoais privados. Você cria, organiza e conversa com IA dentro de cada projeto.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">👥</span>
+          <span class="func-name">Team Space</span>
+        </div>
+        <p class="func-desc">Projetos em grupo com colaboração. Membros podem acessar e contribuir juntos.</p>
+        <span class="func-status wip">Em andamento</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">💬</span>
+          <span class="func-name">Chat por Projeto</span>
+        </div>
+        <p class="func-desc">Cada projeto tem seu próprio chat com IA. O contexto fica salvo dentro do projeto.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">➕</span>
+          <span class="func-name">Criar Projeto</span>
+        </div>
+        <p class="func-desc">Novo projeto com nome e tipo (solo ou equipe) em segundos, direto no app.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🗑️</span>
+          <span class="func-name">Gerenciar Projetos</span>
+        </div>
+        <p class="func-desc">Arquivar, excluir e organizar projetos. Visão geral de tudo que está ativo.</p>
+        <span class="func-status wip">Em andamento</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">📌</span>
+          <span class="func-name">Fixar Conversas</span>
+        </div>
+        <p class="func-desc">Mensagens importantes fixadas no topo do chat do projeto para consulta rápida.</p>
+        <span class="func-status plan">Planejado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASTRA 208 -->
+  <div class="tab-panel" id="tab-astra">
+    <div class="func-grid">
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">🧠</span>
+          <span class="func-name" style="color:var(--purple)">ChatGPT — Arquitetura</span>
+        </div>
+        <p class="func-desc">Especialista em estrutura de código e design de sistemas. Recebe as tarefas de arquitetura.</p>
+        <span class="func-status">Online</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">📄</span>
+          <span class="func-name" style="color:var(--purple)">Claude — Documentação</span>
+        </div>
+        <p class="func-desc">Gera documentação, revisão de textos e explicações detalhadas sobre o projeto.</p>
+        <span class="func-status">Online</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">🔍</span>
+          <span class="func-name" style="color:var(--purple)">Gemini — Pesquisa</span>
+        </div>
+        <p class="func-desc">Pesquisa referências, artigos e dados relevantes para embasar as decisões do projeto.</p>
+        <span class="func-status">Online</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">⚡</span>
+          <span class="func-name" style="color:var(--purple)">Grok — Criatividade</span>
+        </div>
+        <p class="func-desc">Geração de ideias, brainstorming e abordagens criativas para problemas complexos.</p>
+        <span class="func-status">Online</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">🦙</span>
+          <span class="func-name" style="color:var(--purple)">Llama — Privacidade</span>
+        </div>
+        <p class="func-desc">Modelo local para tarefas sensíveis que não devem sair do dispositivo.</p>
+        <span class="func-status wip">Em integração</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">🌊</span>
+          <span class="func-name" style="color:var(--purple)">DeepSeek — Análise</span>
+        </div>
+        <p class="func-desc">Análise profunda de código, dados e lógica. Especialista em raciocínio técnico.</p>
+        <span class="func-status">Online</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">🚀</span>
+          <span class="func-name" style="color:var(--purple)">Manus — Automação</span>
+        </div>
+        <p class="func-desc">Executa tarefas automatizadas e fluxos de trabalho complexos sem intervenção manual.</p>
+        <span class="func-status wip">Em integração</span>
+      </div>
+      <div class="func-card p reveal" style="--fc: var(--purple)">
+        <div class="func-header">
+          <span class="func-icon">⚙️</span>
+          <span class="func-name" style="color:var(--purple)">Distribuição Paralela</span>
+        </div>
+        <p class="func-desc">O orquestrador divide uma tarefa entre as 7 IAs e consolida as respostas automaticamente.</p>
+        <span class="func-status wip">Em andamento</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJETO-IA -->
+  <div class="tab-panel" id="tab-projeto">
+    <div class="func-grid">
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">📋</span>
+          <span class="func-name" style="color:var(--green)">Gerenciar Projetos</span>
+        </div>
+        <p class="func-desc">Cria projetos com nome, descrição e status. Visão geral de todos os projetos ativos.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">✅</span>
+          <span class="func-name" style="color:var(--green)">Tarefas</span>
+        </div>
+        <p class="func-desc">Adiciona tarefas em cada projeto, marca como concluída e acompanha o progresso.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">📊</span>
+          <span class="func-name" style="color:var(--green)">Barra de Progresso</span>
+        </div>
+        <p class="func-desc">Barra visual calculada automaticamente baseada nas tarefas concluídas vs total.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">🟢</span>
+          <span class="func-name" style="color:var(--green)">Status do Projeto</span>
+        </div>
+        <p class="func-desc">Altera o status entre Ativo, Pausado e Completo com indicador visual colorido.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">🤖</span>
+          <span class="func-name" style="color:var(--green)">IA no Projeto</span>
+        </div>
+        <p class="func-desc">Conversa com IA dentro de cada projeto para sugerir tarefas, resolver bloqueios e planejar.</p>
+        <span class="func-status plan">Planejado</span>
+      </div>
+      <div class="func-card g reveal" style="--fc: var(--green)">
+        <div class="func-header">
+          <span class="func-icon">👥</span>
+          <span class="func-name" style="color:var(--green)">Equipe no Projeto</span>
+        </div>
+        <p class="func-desc">Adiciona membros ao projeto e atribui tarefas para cada integrante da equipe.</p>
+        <span class="func-status plan">Planejado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXTRAS -->
+  <div class="tab-panel" id="tab-extras">
+    <div class="func-grid">
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">📱</span>
+          <span class="func-name">App Android (APK)</span>
+        </div>
+        <p class="func-desc">Instalável direto no Android sem precisar de Play Store. Build automático via GitHub Actions.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🌙</span>
+          <span class="func-name">Dark Mode</span>
+        </div>
+        <p class="func-desc">Interface escura com paleta cósmica ciano/roxo. Padrão em todo o app, sem opção clara.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">💾</span>
+          <span class="func-name">Estado Persistente</span>
+        </div>
+        <p class="func-desc">Projetos e configurações salvos localmente no dispositivo via Zustand store.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🔒</span>
+          <span class="func-name">Sem Restrições</span>
+        </div>
+        <p class="func-desc">Versão pessoal sem filtros. Restrições serão adicionadas em versões futuras se necessário.</p>
+        <span class="func-status">Ativo</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🌐</span>
+          <span class="func-name">Web App (este site)</span>
+        </div>
+        <p class="func-desc">Landing page do projeto hospedada via GitHub Pages, separada do app principal.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">⚙️</span>
+          <span class="func-name">CI/CD Automático</span>
+        </div>
+        <p class="func-desc">A cada push na branch main, o APK é gerado automaticamente pelo GitHub Actions.</p>
+        <span class="func-status">Disponível</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🔔</span>
+          <span class="func-name">Notificações</span>
+        </div>
+        <p class="func-desc">Alertas quando tarefas vencem, quando uma IA responde ou quando um projeto muda de status.</p>
+        <span class="func-status plan">Planejado</span>
+      </div>
+      <div class="func-card reveal">
+        <div class="func-header">
+          <span class="func-icon">🔑</span>
+          <span class="func-name">API Keys próprias</span>
+        </div>
+        <p class="func-desc">Configure suas próprias chaves de API para cada IA diretamente nas configurações do app.</p>
+        <span class="func-status plan">Planejado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNÇÕES -->
 <section class="cta-section" id="download">
   <div class="reveal">
     <h2 class="cta-title">Pronto pra usar.</h2>
@@ -530,6 +909,20 @@
     el.style.transitionDelay = `${(i % 4) * 0.08}s`;
     observer.observe(el);
   });
+
+  // Tab switcher
+  function switchTab(id, btn, color) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'purple', 'green'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+    if (color) btn.classList.add(color);
+
+    // Ativa reveal nos cards da aba recém aberta
+    document.querySelectorAll('#tab-' + id + ' .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 60);
+    });
+  }
 </script>
 </body>
 </html>
